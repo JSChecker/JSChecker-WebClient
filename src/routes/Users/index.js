@@ -1,11 +1,17 @@
-import { UserListView, UserItemView } from './components/UsersView'
+import View from './components/UsersView'
 
 export default {
   childRoutes: [{
     path: '/users',
-    component: UserListView,
+    component: View.UserListView
+  }, {
+    path: '/users/create',
+    component: View.UserFormView
   }, {
     path: '/users/:username',
-    component: UserItemView
+    component: View.UserItemView
+  }, {
+    path: '/users/:username/edit',
+    component: View.UserFormView
   }]
 }

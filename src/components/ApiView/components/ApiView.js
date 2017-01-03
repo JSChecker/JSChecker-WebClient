@@ -9,35 +9,67 @@ export class ApiView extends React.Component {
     super(props)
 
     this.state = {
-      data: { }
+      statusCode: null,
+      status: null,
+      message: null,
+      data: null
     }
 
     this.router = props.router
-
     this.xhr = new XMLHttpRequest()
-    this.xhr.onreadystatechange = this.onServerData.bind(this)
   }
 
   get currentPath() {
     return this.router.location.pathname
   }
 
-  get apiUrl() {
-    return ApiView.API_ROOT_URL + this.currentPath
+  defaultCallback(res) {
+    this.setState({
+      statusCode: res.statusCode,
+      status: res.status,
+      data: res.data,
+      message: res.message
+    })
   }
 
-  sendRequest(timeout = 0) {
-    if (this.xhr === null) {
+  sendRequestUrl(url, method = 'get', data = null, cb = null) {
+    if (_.isNull(this.xhr)) {
       return
     }
 
-    let url = this.apiUrl + `?timeout=${timeout}`
-    this.xhr.open('GET', url, true)
-    this.xhr.send()
+    if (_.isFunction(data) && _.isNull(cb)) {
+      cb = data
+      data = null
+    } else if (!_.isFunction(cb)) {
+      cb = this.defaultCallback.bind(this)
+    }
+
+    let apiUrl = ApiView.API_ROOT_URL + url
+
+    this.xhr.onreadystatechange = this.onServerData.bind(this, cb)
+    this.xhr.open(method, apiUrl, true)
+    this.xhr.setRequestHeader('content-type', 'application/vnd.api+json')
+    this.xhr.setRequestHeader('accept', 'application/vnd.api+json')
+
+    this.xhr.send(data && JSON.stringify(data))
+  }
+
+  sendRequest(method = 'get', data = null, cb = null) {
+    this.sendRequestUrl(this.currentPath, method, data, cb)
+  }
+
+  pollingUrl(url, timeout = 10000, cb = null) {
+    let urlTimeout = url + `?timeout=${timeout}`
+    this.xhr.onload = this.sendRequestUrl.bind(this, urlTimeout, 'get', cb)
+    this.sendRequestUrl(url, 'get', cb)
+  }
+
+  polling(timeout = 10000, cb = null) {
+    this.pollingUrl(this.currentPath, timeout, cb)
   }
 
   cancelRequest() {
-    if (this.xhr === null) {
+    if (_.isNull(this.xhr)) {
       return
     }
 
@@ -45,12 +77,8 @@ export class ApiView extends React.Component {
     this.xhr = null
   }
 
-  enablePolling(timeout = 10000) {
-    this.xhr.onload = this.sendRequest.bind(this, timeout)
-  }
-
-  onServerData() {
-    if (this.xhr === null) {
+  onServerData(cb) {
+    if (_.isNull(this.xhr)) {
       return
     }
 
@@ -59,17 +87,22 @@ export class ApiView extends React.Component {
     }
 
     let response = this.xhr.responseText
+    let statusCode = this.xhr.status
 
     if (!response) {
-      return
+      return cb({
+        data: null,
+        message: null,
+        status: null,
+        statusCode: statusCode
+      })
     }
 
     let parsed = JSON.parse(response)
 
-    this.setState({
-      status: parsed.status,
-      data: parsed.data,
-      message: parsed.message
+    cb({
+      ...parsed,
+      statusCode: statusCode
     })
   }
 }

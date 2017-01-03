@@ -9,12 +9,9 @@ export const CoreLayout = ({ children }) => (
     <Header>
       <IndexLink to='/'>Уточка</IndexLink>
       <Link to='/users'>Пользователи</Link>
-      <Link to='/students'>Студенты</Link>
     </Header>
 
-    <main>
-      {children}
-    </main>
+    {children}
   </div>
 )
 
