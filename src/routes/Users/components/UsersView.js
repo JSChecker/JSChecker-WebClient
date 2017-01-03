@@ -1,52 +1,70 @@
 import React from 'react'
+import ApiView from '../../../components/ApiView'
+import { Link } from 'react-router'
 import './UsersView.scss'
-import 'whatwg-fetch'
-import isEqual from 'lodash/isEqual'
 
-export class UsersView extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      users: {
-        etag: null,
-        items: []
-      }
-    }
-
-    setInterval(() => this.updateUsers(), 600)
+export class UserListView extends ApiView {
+  componentWillMount() {
+    // this.enablePolling()
+    this.sendRequest()
   }
 
-  updateUsers() {
-    fetch('http://localhost:8000/api/v1/users', { mode: 'cors' })
-      .then((res) => {
-        return res.json()
-      })
-      .then((data) => {
-        if (isEqual(data.data.users, this.state.users.items)) {
-          return
-        }
-
-        this.setState({ users: { items: data.data.users } })
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+  componentWillUnmount() {
+    this.cancelRequest()
   }
 
   render() {
+    let users = this.state.data.users || []
+
     return (
-      <div>
-        <ul>
-          {
-            this.state.users.items.map((x, i) => (
-              <li key={i}>{x.username}</li>
-            ))
-          }
-        </ul>
-      </div>
+      <nav>
+        {
+          users.map((user, i) => {
+            let url = `${this.currentPath}/${user.username}`
+
+            return (
+              <Link to={url} key={i}>
+                {user.username}
+              </Link>
+            )
+          })
+        }
+      </nav>
     )
   }
 }
 
-export default UsersView
+export class UserItemView extends ApiView {
+  componentWillMount() {
+    this.sendRequest()
+  }
+
+  componentWillUnmount() {
+    this.cancelRequest()
+  }
+
+  render() {
+    let user = this.state.data.user
+
+    if (!user) {
+      return (
+        <dl></dl>
+      )
+    }
+
+    return (
+      <dl>
+        <dt>Username</dt>
+        <dd>{user.username}</dd>
+        <dt>Фамилия</dt>
+        <dd>{user.name.last}</dd>
+        <dt>Имя</dt>
+        <dd>{user.name.first}</dd>
+        <dt>Отчество</dt>
+        <dd>{user.name.middle}</dd>
+        <dt>Активный</dt>
+        <dd>{user.active ? 'Да' : 'Нет'}</dd>
+      </dl>
+    )
+  }
+}

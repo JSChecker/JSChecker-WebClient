@@ -1,7 +1,11 @@
-import UsersView from './components/UsersView'
-
+import { UserListView, UserItemView } from './components/UsersView'
 
 export default {
-  component: UsersView,
-  path: 'users'
+  childRoutes: [{
+    path: '/users',
+    component: UserListView,
+  }, {
+    path: '/users/:username',
+    component: UserItemView
+  }]
 }

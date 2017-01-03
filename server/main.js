@@ -11,6 +11,23 @@ const app = express()
 // Apply gzip compression
 app.use(compress())
 
+// Proxy to API server
+const API_HOST = 'http://localhost'
+const API_PORT = 8000
+const API_URL = `${API_HOST}:${API_PORT}`
+
+var request = require('request')
+
+app.use('/api', (req, res, next) => {
+  var newurl = API_URL + req.originalUrl
+  try {
+    req.pipe(request(newurl)).pipe(res)
+  } catch (e) {
+    console.log(e)
+    next();
+  }
+})
+
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
@@ -65,5 +82,7 @@ if (project.env === 'development') {
   // server in production.
   app.use(express.static(project.paths.dist()))
 }
+
+
 
 module.exports = app
