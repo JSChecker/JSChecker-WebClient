@@ -1,8 +1,11 @@
 import React from 'react'
-import { IndexLink, Link } from 'react-router'
 import './Header.scss'
 
 export class Header extends React.Component {
+  static propTypes = {
+    children: React.PropTypes.arrayOf(React.PropTypes.element)
+  }
+
   render () {
     return (
       <header>

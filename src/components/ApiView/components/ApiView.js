@@ -1,11 +1,15 @@
 import React from 'react'
-import { Link } from 'react-router'
-import isEqual from 'lodash/isEqual'
+
+import _ from 'lodash'
 
 export class ApiView extends React.Component {
   static API_ROOT_URL = '/api/v1'
 
-  constructor(props) {
+  static propTypes = {
+    router: React.PropTypes.object.isRequired
+  }
+
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -19,11 +23,11 @@ export class ApiView extends React.Component {
     this.xhr = new XMLHttpRequest()
   }
 
-  get currentPath() {
+  get currentPath () {
     return this.router.location.pathname
   }
 
-  defaultCallback(res) {
+  defaultCallback (res) {
     this.setState({
       statusCode: res.statusCode,
       status: res.status,
@@ -32,7 +36,7 @@ export class ApiView extends React.Component {
     })
   }
 
-  sendRequestUrl(url, method = 'get', data = null, cb = null) {
+  sendRequestUrl (url, method = 'get', data = null, cb = null) {
     if (_.isNull(this.xhr)) {
       return
     }
@@ -54,21 +58,21 @@ export class ApiView extends React.Component {
     this.xhr.send(data && JSON.stringify(data))
   }
 
-  sendRequest(method = 'get', data = null, cb = null) {
+  sendRequest (method = 'get', data = null, cb = null) {
     this.sendRequestUrl(this.currentPath, method, data, cb)
   }
 
-  pollingUrl(url, timeout = 10000, cb = null) {
+  pollingUrl (url, timeout = 10000, cb = null) {
     let urlTimeout = url + `?timeout=${timeout}`
     this.xhr.onload = this.sendRequestUrl.bind(this, urlTimeout, 'get', cb)
     this.sendRequestUrl(url, 'get', cb)
   }
 
-  polling(timeout = 10000, cb = null) {
+  polling (timeout = 10000, cb = null) {
     this.pollingUrl(this.currentPath, timeout, cb)
   }
 
-  cancelRequest() {
+  cancelRequest () {
     if (_.isNull(this.xhr)) {
       return
     }
@@ -77,7 +81,7 @@ export class ApiView extends React.Component {
     this.xhr = null
   }
 
-  onServerData(cb) {
+  onServerData (cb) {
     if (_.isNull(this.xhr)) {
       return
     }

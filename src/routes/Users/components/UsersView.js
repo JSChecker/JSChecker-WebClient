@@ -1,20 +1,20 @@
 import React from 'react'
 import ApiView from '../../../components/ApiView'
-import { Link, Navigation } from 'react-router'
+import { Link } from 'react-router'
 import './UsersView.scss'
 
 import _ from 'lodash'
 
 export class UserListView extends ApiView {
-  componentWillMount() {
+  componentWillMount () {
     this.polling()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.cancelRequest()
   }
 
-  get links() {
+  get links () {
     let users = _.get(this.state, 'data.users', [])
 
     return users.map((user, i) => {
@@ -30,7 +30,7 @@ export class UserListView extends ApiView {
     })
   }
 
-  render() {
+  render () {
     return (
       <main>
         <ul>
@@ -46,17 +46,17 @@ export class UserListView extends ApiView {
 }
 
 export class UserItemView extends ApiView {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.handleDelete = this.handleDelete.bind(this)
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.sendRequest()
   }
 
-  handleDelete(e) {
+  handleDelete (e) {
     e.preventDefault()
 
     this.sendRequest('delete', (res) => {
@@ -66,12 +66,12 @@ export class UserItemView extends ApiView {
     })
   }
 
-  render() {
+  render () {
     let user = _.get(this.state, 'data.user', null)
 
     if (!user) {
       return (
-        <dl></dl>
+        <dl />
       )
     }
 
@@ -96,10 +96,10 @@ export class UserItemView extends ApiView {
           Изменить
         </Link>
 
-        <hr/>
+        <hr />
 
         <form onSubmit={this.handleDelete}>
-          <button type="submit">
+          <button type='submit'>
             Удалить
           </button>
         </form>
@@ -121,7 +121,7 @@ export class UserFormView extends ApiView {
     active: true
   }
 
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.username = props.params.username
@@ -130,7 +130,7 @@ export class UserFormView extends ApiView {
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  componentWillMount() {
+  componentWillMount () {
     let ef = UserFormView.EMPTY_FORM
 
     this.setState({
@@ -155,7 +155,7 @@ export class UserFormView extends ApiView {
     })
   }
 
-  handleChange(e) {
+  handleChange (e) {
     let form = _.set(this.state.form, e.target.name, e.target.value)
 
     this.setState({
@@ -163,7 +163,7 @@ export class UserFormView extends ApiView {
     })
   }
 
-  handleSubmit(e) {
+  handleSubmit (e) {
     e.preventDefault()
 
     let url
@@ -188,7 +188,7 @@ export class UserFormView extends ApiView {
     })
   }
 
-  render() {
+  render () {
     let form = this.state.form
 
     return (
@@ -196,53 +196,53 @@ export class UserFormView extends ApiView {
         <form onSubmit={this.handleSubmit}>
           <label>
             Username
-            <input type="text"
-                   value={form.username}
-                   name="username"
-                   onChange={this.handleChange} />
-          </label><br/>
+            <input type='text'
+              value={form.username}
+              name='username'
+              onChange={this.handleChange} />
+          </label><br />
           <label>
             Фамилия
-            <input type="text"
-                   value={form.name.last}
-                   name="name.last"
-                   onChange={this.handleChange} />
-          </label><br/>
+            <input type='text'
+              value={form.name.last}
+              name='name.last'
+              onChange={this.handleChange} />
+          </label><br />
           <label>
             Имя
-            <input type="text"
-                   value={form.name.first}
-                   name="name.first"
-                   onChange={this.handleChange} />
-          </label><br/>
+            <input type='text'
+              value={form.name.first}
+              name='name.first'
+              onChange={this.handleChange} />
+          </label><br />
           <label>
             Отчество
-            <input type="text"
-                   value={form.name.middle}
-                   name="name.middle"
-                   onChange={this.handleChange} />
-          </label><br/>
+            <input type='text'
+              value={form.name.middle}
+              name='name.middle'
+              onChange={this.handleChange} />
+          </label><br />
           <label>
             Почта
-            <input type="email"
-                   value={form.email}
-                   name="email"
-                   onChange={this.handleChange} />
-          </label><br/>
+            <input type='email'
+              value={form.email}
+              name='email'
+              onChange={this.handleChange} />
+          </label><br />
           <label>
             Пароль
-            <input type="password"
-                   name="password"
-                   onChange={this.handleChange} />
-          </label><br/>
+            <input type='password'
+              name='password'
+              onChange={this.handleChange} />
+          </label><br />
           <label>
             Активный
-            <input type="checkbox"
-                   checked={form.active}
-                   name="active"
-                   onChange={this.handleChange} />
-          </label><br/>
-          <input type="submit" />
+            <input type='checkbox'
+              checked={form.active}
+              name='active'
+              onChange={this.handleChange} />
+          </label><br />
+          <input type='submit' />
         </form>
       </main>
     )

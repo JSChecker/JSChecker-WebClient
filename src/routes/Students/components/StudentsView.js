@@ -4,16 +4,16 @@ import { Link } from 'react-router'
 import './StudentsView.scss'
 
 export class StudentListView extends ApiView {
-  componentWillMount() {
+  componentWillMount () {
     // this.enablePolling()
     this.sendRequest()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.cancelRequest()
   }
 
-  get links() {
+  get links () {
     let students = this.state.data.students || []
 
     return students.map((student, i) => {
@@ -27,7 +27,7 @@ export class StudentListView extends ApiView {
     })
   }
 
-  render() {
+  render () {
     return (
       <nav>
         {this.links}
@@ -37,20 +37,20 @@ export class StudentListView extends ApiView {
 }
 
 export class StudentItemView extends ApiView {
-  componentWillMount() {
+  componentWillMount () {
     this.sendRequest()
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.cancelRequest()
   }
 
-  render() {
+  render () {
     let student = this.state.data.student
 
     if (!student) {
       return (
-        <dl></dl>
+        <dl />
       )
     }
 

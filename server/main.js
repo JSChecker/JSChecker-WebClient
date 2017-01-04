@@ -24,7 +24,7 @@ app.use('/api', (req, res, next) => {
     req.pipe(request(newurl)).pipe(res)
   } catch (e) {
     console.log(e)
-    next();
+    next()
   }
 })
 
@@ -82,7 +82,5 @@ if (project.env === 'development') {
   // server in production.
   app.use(express.static(project.paths.dist()))
 }
-
-
 
 module.exports = app
