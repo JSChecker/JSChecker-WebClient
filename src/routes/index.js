@@ -1,17 +1,22 @@
 import CoreLayout from '../layouts/CoreLayout'
 import Home from './Home'
 
-import UsersView from './Users'
-import StudentsView from './Students'
+import LoginView from './Login'
+import TasksView from './Tasks'
 
 export const createRoutes = (store) => ({
-  path        : '/',
-  component   : CoreLayout,
-  indexRoute  : Home,
-  childRoutes : [
-    UsersView,
-    StudentsView
-  ]
+  childRoutes: [{
+    path        : '/',
+    component   : CoreLayout,
+    indexRoute: Home,
+    childRoutes : [
+      TasksView
+    ]
+  }, {
+    childRoutes: [
+      LoginView,
+    ]
+  }]
 })
 
 export default createRoutes

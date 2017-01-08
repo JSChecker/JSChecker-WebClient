@@ -1,0 +1,48 @@
+@import '../../../styles/themes/current';
+
+.task-list {
+  display: block;
+  width: 100%;
+  border: 1px solid $accent-color;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.task-item {
+  display: block;
+  width: 100%;
+  background: #fff;
+
+  .task-header {
+    height: 70px;
+    line-height: 70px;
+    padding: 0 15px 0 30px;
+
+    .task-title {
+      display: inline-block;
+      font-size: 22px;
+      font-weight: normal;
+      cursor: pointer;
+    }
+
+    .task-header-actions {
+      float: right;
+
+      .action + .action {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .task-description {
+    background: rgba(0, 0, 0, .05);
+    padding: 15px 30px;
+    line-height: 22px;
+    font-size: 16px;
+    transition: .3s;
+  }
+}
+
+.task-item + .task-item {
+  border-top: 1px solid $accent-color;
+}

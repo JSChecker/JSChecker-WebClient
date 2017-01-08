@@ -1,12 +1,58 @@
-/*
-Application Settings Go Here
-------------------------------------
-This file acts as a bundler for all variables/mixins/themes, so they
-can easily be swapped out without `core.scss` ever having to know.
+@import './themes/current';
+@import './form';
 
-For example:
+body {
+  background: $background-color;
+  color: $font-color;
+  font-family: PTSans, Tahoma, sans-serif;
+}
 
-@import './variables/colors';
-@import './variables/components';
-@import './themes/default';
-*/
+.logo-big::before {
+  content: 'JChecker';
+  color: $accent-color;
+  font: 68px 'BolsterBold';
+  line-height: 73px;
+}
+
+.logo-small::before {
+  content: 'JC';
+  color: $accent-color;
+  font: 36px 'BolsterBold';
+}
+
+.btn {
+  display: inline-block;
+  background: none;
+  border: 1px solid #888;
+  border-radius: 2px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  text-decoration: none;
+  padding: 0 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: .1s;
+}
+
+.btn-info {
+  border-color: $accent-color;
+  color: $accent-color;
+
+  &:hover,
+  &:focus {
+    background: $accent-color;
+    color: $background-color;
+  }
+}
+
+.btn-success {
+  border-color: $success-color;
+  color: $success-color;
+
+  &:hover,
+  &:focus {
+    background: $success-color;
+    color: $background-color;
+  }
+}

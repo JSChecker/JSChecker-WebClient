@@ -1,0 +1,26 @@
+.login-container {
+  display: block;
+  width: 600px;
+  padding-top: 162px;
+  margin: 0 auto;
+
+  .logo-big {
+    padding: 0 45px;
+  }
+}
+
+.login-form {
+  width: 100%;
+  margin-top: 66px;
+  padding: 45px 45px 0;
+
+  .form-input-box + .form-input-box {
+    margin-top: 40px;
+  }
+
+  .form-button {
+    display: block;
+    width: 240px;
+    margin: 55px auto;
+  }
+}

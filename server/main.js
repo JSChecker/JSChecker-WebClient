@@ -8,6 +8,8 @@ const compress = require('compression')
 
 const app = express()
 
+app.disable('x-powered-by')
+
 // Apply gzip compression
 app.use(compress())
 

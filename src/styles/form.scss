@@ -1,0 +1,49 @@
+.form-input-box {
+  position: relative;
+  display: block;
+  padding: 0;
+  height: 70px;
+  width: 500px;
+  line-height: 70px;
+  border: 1px solid $accent-color;
+  border-radius: 2px;
+}
+
+.form-input-box.invalid {
+  border: 1px solid $error-color;
+}
+
+.form-input {
+  padding: 0 15px;
+  height: 100%;
+  width: 100%;
+  font: 22px PTSans, Tahoma, sans-serif;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.form-input-error {
+  position: absolute;
+  top: -25px;
+  left: 0;
+  color: $error-color;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.form-button {
+  background: none;
+  color: $accent-color;
+  cursor: pointer;
+  transition: .1s;
+  height: 60px;
+  border: 1px solid $accent-color;
+  border-radius: 2px;
+}
+
+.form-button:hover,
+.form-button:focus {
+  background: $accent-color;
+  color: $background-color;
+}

@@ -21,6 +21,7 @@ export class ApiView extends React.Component {
 
     this.router = props.router
     this.xhr = new XMLHttpRequest()
+    this.xhr.withCredentials = true
   }
 
   get currentPath () {
@@ -41,12 +42,19 @@ export class ApiView extends React.Component {
       return
     }
 
-    if (_.isFunction(data) && _.isNull(cb)) {
-      cb = data
-      data = null
-    } else if (!_.isFunction(cb)) {
-      cb = this.defaultCallback.bind(this)
+    if (_.isNull(cb)) {
+      if (_.isFunction(data)) {
+        cb = data
+        data = null
+      } else if (_.isFunction(method)) {
+        cb = method
+        method = 'get'
+      } else {
+        cb = this.defaultCallback.bind(this)
+      }
     }
+
+    let token = localStorage.getItem('token')
 
     let apiUrl = ApiView.API_ROOT_URL + url
 
@@ -54,6 +62,7 @@ export class ApiView extends React.Component {
     this.xhr.open(method, apiUrl, true)
     this.xhr.setRequestHeader('content-type', 'application/vnd.api+json')
     this.xhr.setRequestHeader('accept', 'application/vnd.api+json')
+    this.xhr.setRequestHeader('authorization', `JWT ${token}`)
 
     this.xhr.send(data && JSON.stringify(data))
   }
@@ -93,21 +102,14 @@ export class ApiView extends React.Component {
     let response = this.xhr.responseText
     let statusCode = this.xhr.status
 
-    if (!response) {
-      return cb({
-        data: null,
-        message: null,
-        status: null,
-        statusCode: statusCode
-      })
-    }
+    let parsed = response ? JSON.parse(response) : {}
 
-    let parsed = JSON.parse(response)
-
-    cb({
-      ...parsed,
+    cb(_.defaults(parsed, {
+      data: null,
+      message: null,
+      status: null,
       statusCode: statusCode
-    })
+    }))
   }
 }
 
