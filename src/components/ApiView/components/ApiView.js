@@ -73,7 +73,7 @@ export class ApiView extends React.Component {
 
   pollingUrl (url, timeout = 10000, cb = null) {
     let urlTimeout = url + `?timeout=${timeout}`
-    this.xhr.onload = this.sendRequestUrl.bind(this, urlTimeout, 'get', cb)
+    this.xhr.onload = this.sendRequestUrl.bind(this, urlTimeout, 'get', null, cb)
     this.sendRequestUrl(url, 'get', cb)
   }
 
@@ -101,6 +101,15 @@ export class ApiView extends React.Component {
 
     let response = this.xhr.responseText
     let statusCode = this.xhr.status
+
+    if (statusCode === 401) {
+      this.router.replace(`/login?redirect=${this.router.location.pathname}`)
+      return
+    }
+
+    if (statusCode === 403) {
+      this.cancelRequest()
+    }
 
     let parsed = response ? JSON.parse(response) : {}
 

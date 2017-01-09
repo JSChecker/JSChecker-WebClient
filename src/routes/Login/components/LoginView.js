@@ -32,16 +32,27 @@ export class LoginView extends ApiView {
     }))
   }
 
+  _onLoggedIn(data) {
+    let redirectUrl = this.props.location.query.redirect || '/'
+
+    let token = data.token
+    localStorage.setItem('token', token)
+
+    let user = data.user
+    localStorage.setItem('user', JSON.stringify(user))
+
+    console.log(localStorage.getItem('user'))
+
+    this.props.router.replace(redirectUrl)
+  }
+
   handleSubmit(e) {
     e.preventDefault()
 
     this.sendRequestUrl('/token', 'post', this.state.data, (res) => {
       switch(res.status) {
         case 'success':
-          let redirectUrl = this.props.location.query.redirect || '/'
-          let token = res.data.token
-          localStorage.setItem('token', token)
-          this.props.router.replace(redirectUrl)
+          this._onLoggedIn(res.data)
           break
         case 'fail':
           this.setState({
