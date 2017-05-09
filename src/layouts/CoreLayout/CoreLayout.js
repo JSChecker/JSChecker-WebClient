@@ -1,8 +1,10 @@
 import React from 'react'
-import Header from '../../components/Header'
+import LogoutButton from '../../components/LogoutButton'
+import Loader from '../../components/Loader'
 import { IndexLink, Link } from 'react-router'
-import './CoreLayout.scss'
+import '../../styles/font-awesome/scss/font-awesome.scss'
 import '../../styles/core.scss'
+import './CoreLayout.scss'
 
 
 export class CoreLayout extends React.Component {
@@ -10,7 +12,19 @@ export class CoreLayout extends React.Component {
     children : React.PropTypes.element.isRequired
   }
 
-  _getUserData() {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      loaded: false
+    }
+  }
+
+  componentDidMount () {
+    setTimeout(() => this.setState({ loaded: true }), 700)
+  }
+
+  _getUserData () {
     let user = localStorage.getItem('user')
 
     let userName = ''
@@ -30,12 +44,13 @@ export class CoreLayout extends React.Component {
     return { name: userName, group: userGroup, type: userType }
   }
 
-  renderTeacher(user) {
+  renderTeacher (user) {
     return (
       <div className="app-layout">
         <aside className="sidebar">
           <div className="sidebar-top">
             <section className="user-info">
+              <LogoutButton />
               <h2 className="user-name">
                 {user.name}
               </h2>
@@ -46,20 +61,34 @@ export class CoreLayout extends React.Component {
           </div>
           <div className="sidebar-bottom">
             <nav className="nav-menu">
-              <Link className="menu-item" activeClassName="active" to="/tasks">Все задачи</Link>
-              <Link className="menu-item" activeClassName="active" to="/users">Пользователи</Link>
-              <Link className="menu-item" activeClassName="active" to="/solutions">Проверки</Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/tasks">
+                Все задачи
+              </Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/users">
+                Пользователи
+              </Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/solutions">
+                Проверки
+              </Link>
             </nav>
           </div>
         </aside>
         <main className="content">
-          {this.props.children}
+          <div className="content-inner">
+            {this.props.children}
+          </div>
         </main>
       </div>
     )
   }
 
-  renderStudent(user) {
+  renderStudent (user) {
     return (
       <div className="app-layout">
         <aside className="sidebar">
@@ -67,6 +96,7 @@ export class CoreLayout extends React.Component {
             <section className="user-info">
               <h2 className="user-name">
                 {user.name}
+                <LogoutButton />
               </h2>
               <h3 className="user-group">
                 {user.group}
@@ -79,39 +109,69 @@ export class CoreLayout extends React.Component {
           </div>
           <div className="sidebar-bottom">
             <nav className="nav-menu">
-              <Link className="menu-item" activeClassName="active" to="/tasks">Все задачи</Link>
-              <Link className="menu-item" activeClassName="active" to="/solutions">Проверки</Link>
-              <Link className="menu-item" activeClassName="active" to="/achievements">Достижения</Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/tasks">
+                Все задачи
+              </Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/solutions">
+                Проверки
+              </Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/achievements">
+                Достижения
+              </Link>
             </nav>
           </div>
         </aside>
         <main className="content">
-          {this.props.children}
+          <div className="content-inner">
+            {this.props.children}
+          </div>
         </main>
       </div>
     )
   }
 
-  renderAnonymous(user) {
+  renderAnonymous (user) {
     return (
       <div className="app-layout">
         <aside className="sidebar">
           <div className="sidebar-bottom">
             <nav className="nav-menu">
-              <Link className="menu-item" activeClassName="active" to="/users">Пользователи</Link>
-              <Link className="menu-item" activeClassName="active" to="/tasks">Все задачи</Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/login">
+                Войти
+              </Link>
+              <Link className="menu-item"
+                    activeClassName="active"
+                    to="/tasks">
+                Все задачи
+              </Link>
             </nav>
           </div>
         </aside>
         <main className="content">
-          {this.props.children}
+          <div className="content-inner">
+            {this.props.children}
+          </div>
         </main>
       </div>
     )
   }
 
-  render() {
+  render () {
     let user = this._getUserData()
+
+    if (!this.state.loaded) {
+      return (
+        <Loader />
+      )
+    }
 
     switch(user.type) {
       case 'Student':

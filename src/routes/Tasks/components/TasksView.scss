@@ -22,7 +22,6 @@
       display: inline-block;
       font-size: 22px;
       font-weight: normal;
-      cursor: pointer;
     }
 
     .task-header-actions {
@@ -33,16 +32,22 @@
       }
     }
   }
-
-  .task-description {
-    background: rgba(0, 0, 0, .05);
-    padding: 15px 30px;
-    line-height: 22px;
-    font-size: 16px;
-    transition: .3s;
-  }
 }
 
 .task-item + .task-item {
   border-top: 1px solid $accent-color;
+}
+
+.task-difficulty {
+  float: right;
+  line-height: 42px;
+}
+
+.task-description {
+  font-size: 18px;
+  line-height: 32px;
+
+  .paragraph + .paragraph {
+    margin-top: 20px;
+  }
 }

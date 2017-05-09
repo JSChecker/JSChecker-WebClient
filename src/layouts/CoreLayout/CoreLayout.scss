@@ -1,6 +1,6 @@
 @import '../styles/themes/current';
 
-$sidebar-width: 400px;
+$sidebar-width: 20%;
 
 .app-layout {
   height: 100%;
@@ -14,14 +14,21 @@ $sidebar-width: 400px;
   left: 0;
   bottom: 0;
   width: $sidebar-width;
+  min-width: 300px;
+  max-width: 400px;
   background: #fff;
   border-right: 1px solid $accent-color;
   padding: 0;
   overflow: hidden;
+  overflow-y: auto;
 
   .sidebar-top {
     padding: 30px 30px 38px;
     border-bottom: 1px solid $background-color;
+
+    .logout-button {
+      float: right;
+    }
   }
 
   .sidebar-bottom {
@@ -107,12 +114,38 @@ $sidebar-width: 400px;
   top: 0;
   right: 0;
   bottom: 0;
+  left: 0;
   left: $sidebar-width;
-  padding: 72px 100px 125px;
   overflow-y: scroll;
+
+  .content-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    min-width: 1016px;
+    max-width: 1016px;
+    padding: 72px 100px 125px;
+    border-right: 1px solid #eee;
+  }
 }
 
 .view-title {
   font-size: 38px;
   margin-bottom: 34px;
+  max-width: 600px;
+}
+
+.icon-link {
+  margin-left: 10px;
+  line-height: 42px;
+  display: inline-block;
+  height: 42px;
+
+ .fa {
+    color: $font-color;
+    font-size: 36px;
+    line-height: 42px;
+  }
 }

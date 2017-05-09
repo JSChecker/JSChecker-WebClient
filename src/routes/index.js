@@ -13,12 +13,12 @@ export const createRoutes = (store) => ({
     indexRoute  : Home,
     childRoutes : [
       TasksView,
-      UsersView
+      UsersView,
+      LogoutView
     ]
   }, {
     childRoutes: [
       LoginView,
-      LogoutView
     ]
   }]
 })

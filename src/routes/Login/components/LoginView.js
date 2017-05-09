@@ -4,6 +4,7 @@ import './LoginView.scss'
 import _ from 'lodash'
 
 import ApiView from '../../../components/ApiView'
+import Loader from '../../../components/Loader'
 
 export class LoginView extends ApiView {
   constructor(props) {
@@ -17,7 +18,8 @@ export class LoginView extends ApiView {
       errors: {
         username: null,
         password: null
-      }
+      },
+      loaded: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -30,6 +32,10 @@ export class LoginView extends ApiView {
     this.setState((state) => ({
       data: _.set(state.data, name, value)
     }))
+  }
+
+  componentDidMount () {
+    setTimeout(() => this.setState({ loaded: true }), 700)
   }
 
   _onLoggedIn(data) {
@@ -70,10 +76,18 @@ export class LoginView extends ApiView {
   }
 
   render() {
+    if (!this.state.loaded) {
+      return (
+        <Loader />
+      )
+    }
+
     let { username: ue, password: pe } = this.state.errors
 
     return (
       <section className="login-container">
+        <button className="back-button"
+                onClick={this.router.goBack}>Back</button>
         <span className="logo-big"></span>
         <form className="form login-form"
               onSubmit={this.handleSubmit}>
